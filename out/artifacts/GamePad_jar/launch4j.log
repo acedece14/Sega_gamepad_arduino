@@ -1,0 +1,22 @@
+
+
+Version:	3.9
+CmdLine:	d:\workspace\GamePad\out\artifacts\GamePad_jar\GamePad.exe --l4j-debug
+WOW64:		yes
+Working dir:	d:\workspace\GamePad\out\artifacts\GamePad_jar\.
+64-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8
+Ignore:		1.8
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8.0_121
+Check launcher:	C:\Program Files\Java\jre1.8.0_121\bin\javaw.exe (OK)
+Match:		1.8.0_121
+64-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+Check:		SOFTWARE\JavaSoft\Java Development Kit\1.8
+Ignore:		1.8
+Check:		SOFTWARE\JavaSoft\Java Development Kit\1.8.0_121
+Ignore:		1.8.0_121
+Runtime used:	1.8.0_121 (64-bit)
+Launcher:	C:\Program Files\Java\jre1.8.0_121\bin\javaw.exe
+Launcher args:	-jar "d:\workspace\GamePad\out\artifacts\GamePad_jar\GamePad.exe"
+Args length:	65/32768 chars
+Exit code:	0
