@@ -25,5 +25,7 @@
     <orderEntry type="library" name="jna-platform-4.0.0" level="project" />
     <orderEntry type="library" name="jna-platform-4.0.01" level="project" />
     <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="library" name="jgoodies-common-1.8.1" level="project" />
+    <orderEntry type="library" name="jgoodies-forms-1.9.0" level="project" />
   </component>
 </module>

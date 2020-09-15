@@ -1,28 +1,29 @@
 package by.katz;
 
-import gnu.io.CommPortIdentifier;
-
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Scanner;
+import by.katz.gui.FormSelectPort;
 
 
 public class Main {
 
-    private static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
+
+        new FormSelectPort();
+/*
+        if (true)
+            return;
         ArrayList<CommPortIdentifier> ports = PortEnumerator.getPorts();
-        System.out.println("Select port");
+
         //int portNumber =  Integer.valueOf(input.nextLine());
         int portNumber = 1;
 
         PortSpeedSelector.init();
+        portNumber = PortSpeedSelector.readPortNumber();
         // PortSpeedSelector.showSpeeds();
         int portSpeed = 115200; //Integer.valueOf(input.nextLine());
         // MyUart uart = new MyUart(ports.get(portNumber), PortSpeedSelector.getSpeed(portSpeed));
         MyUart uart = new MyUart(ports.get(portNumber), portSpeed);
         Runtime.getRuntime().addShutdownHook(new Thread(uart::stop));
-        JFrame form = new FormMain(uart);
+        JFrame form = new FormMain(uart);*/
     }
 }
