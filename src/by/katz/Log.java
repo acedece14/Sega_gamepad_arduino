@@ -1,9 +1,12 @@
 package by.katz;
 
 import javax.swing.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Log {
+
+    private static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:sss");
 
     private static JTextArea txtLog;
 
@@ -13,7 +16,7 @@ public class Log {
 
     public static void log(String logString) {
 
-        logString = new Date().toString() + " " + logString;
+        logString = sdf.format(new Date()) + "\t" + logString;
 
         System.out.println(logString);
         if (txtLog != null)

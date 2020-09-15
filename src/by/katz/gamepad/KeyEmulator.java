@@ -10,6 +10,8 @@ import java.util.Set;
  * Created by katz on 17.06.2017.
  */
 class KeyEmulator {
+
+    private static KeyEmulator instance;
     private Robot robot;
 
     private KeyEmulator() {
@@ -20,9 +22,6 @@ class KeyEmulator {
             System.exit(1);
         }
     }
-
-
-    private static KeyEmulator instance;
 
     static KeyEmulator getInstance() {
         return instance == null ? instance = new KeyEmulator() : instance;
@@ -79,7 +78,6 @@ class KeyEmulator {
     private Set<Integer> states = new HashSet<>();
 
     private void keystroke(int key, boolean state) {
-
         if (state && !states.contains(key)) {
             states.add(key);
             robot.keyPress(key);

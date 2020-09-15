@@ -14,10 +14,18 @@ import java.io.InputStream;
  */
 public class MyUart {
 
+    private final CommPortIdentifier port;
+    private final int speed;
     private CommPort commPort;
-    SerialReader serialReader;
+    private SerialReader serialReader;
 
-    public MyUart(CommPortIdentifier port, int speed) throws UnsupportedCommOperationException, IOException, PortInUseException {
+    public MyUart(CommPortIdentifier port, int speed) {
+        this.port = port;
+        this.speed = speed;
+    }
+
+
+    public void start() throws UnsupportedCommOperationException, IOException, PortInUseException {
         commPort = port.open(this.getClass().getName(), 2000);
 
         SerialPort serialPort = (SerialPort) commPort;
@@ -38,19 +46,18 @@ public class MyUart {
             commPort.close();
         } catch (Exception e) {
             e.printStackTrace();
-
             Log.log("Error, while closing port! " + e.getLocalizedMessage());
+            return;
         }
         Log.log("Port closed");
     }
-
 
     private class SerialReader extends Thread {
 
         private DataInputStream in;
         private boolean isStop = false;
 
-        public void stopReader() {
+        void stopReader() {
             isStop = true;
         }
 
@@ -76,6 +83,7 @@ public class MyUart {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                Log.log("Error while read input buffer");
             }
         }
     }

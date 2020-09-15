@@ -85,7 +85,9 @@ public class GamePad {
         try {
             value = Integer.valueOf(args);
         } catch (NumberFormatException e) {
-            System.exit(1);
+            Log.log("error decode: " + e);
+            e.printStackTrace();
+            //System.exit(1);
             return;
         }
 
@@ -99,8 +101,7 @@ public class GamePad {
     }
 
     private void applyButton(int key, boolean state) {
-        long time = System.currentTimeMillis();
-        Log.log(time + " KEY: " + key + " state: " + state);
+        Log.log( "KEY: " + key + " state: " + state);
         switch (key) {
             case UP:
                 KeyEmulator.getInstance().pressArrowUp(state);

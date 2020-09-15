@@ -86,16 +86,18 @@ public class FormSelectPort extends JFrame {
 
         if (state == CLOSED) {
             CommPortIdentifier port = ports.get(lstComPorts.getSelectedIndex());
+            uart = new MyUart(port, 115200);
             try {
-                uart = new MyUart(port, 115200);
-                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                uart.start();
+                /*Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                     Log.log("Shutdown hook");
                     uart.stop();
-                }));
+                }));*/
                 btnOpenClosePort.setText("Close port");
                 state = OPENED;
             } catch (UnsupportedCommOperationException | IOException | PortInUseException e2) {
                 JOptionPane.showMessageDialog(null, e2.getLocalizedMessage());
+                Log.log("Error while open port: " + e2.getLocalizedMessage());
                 state = CLOSED;
             }
         } else if (state == OPENED) {
