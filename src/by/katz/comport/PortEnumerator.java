@@ -1,5 +1,6 @@
 package by.katz.comport;
 
+import by.katz.Log;
 import gnu.io.CommPortIdentifier;
 
 import java.util.ArrayList;
@@ -12,16 +13,17 @@ import java.util.Enumeration;
 public class PortEnumerator {
 
     public static ArrayList<CommPortIdentifier> getPorts() {
+
         ArrayList<CommPortIdentifier> ports = new ArrayList<>();
         Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
 
         int number = 0;
-        System.out.println("Available COM-ports");
-        System.out.println("Number : description");
+        Log.log("Available COM-ports");
+        Log.log("Number : description");
         while (portEnum.hasMoreElements()) {
             CommPortIdentifier portIdentifier = portEnum.nextElement();
             ports.add(portIdentifier);
-            System.out.println(number++ + " : (" + getPortTypeName(portIdentifier.getPortType()) + ") " + portIdentifier.getName());
+            Log.log(number++ + " : (" + getPortTypeName(portIdentifier.getPortType()) + ") " + portIdentifier.getName());
 
         }
         return ports;

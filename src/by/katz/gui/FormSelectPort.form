@@ -4,6 +4,10 @@
     <rowspec value="center:d:grow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="bottom:m:noGrow"/>
+    <colspec value="fill:119px:noGrow"/>
+    <colspec value="left:4dlu:noGrow"/>
+    <colspec value="fill:5px:noGrow"/>
+    <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:d:grow"/>
     <constraints>
       <xy x="20" y="20" width="506" height="417"/>
@@ -29,6 +33,26 @@
         </constraints>
         <properties/>
       </component>
+      <hspacer id="e0549">
+        <constraints>
+          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+      </hspacer>
+      <scrollpane id="5e446">
+        <constraints>
+          <grid row="0" column="4" row-span="3" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="70540" class="javax.swing.JTextArea" binding="txtLog">
+            <constraints/>
+            <properties/>
+          </component>
+        </children>
+      </scrollpane>
     </children>
   </grid>
 </form>

@@ -1,5 +1,7 @@
 package by.katz.gamepad;
 
+import by.katz.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -42,7 +44,7 @@ public class GamePad {
         lastBits = new boolean[BUTTONS_COUNT];
         keys = new Keys();
         for (Button key : keys)
-            System.out.println(key.toString());
+            Log.log(key.toString());
     }
 
     public static GamePad getInstance() {
@@ -98,7 +100,7 @@ public class GamePad {
 
     private void applyButton(int key, boolean state) {
         long time = System.currentTimeMillis();
-        System.out.println(time + " KEY: " + key + " state: " + state);
+        Log.log(time + " KEY: " + key + " state: " + state);
         switch (key) {
             case UP:
                 KeyEmulator.getInstance().pressArrowUp(state);

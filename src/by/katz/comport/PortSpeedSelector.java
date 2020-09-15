@@ -1,11 +1,14 @@
 package by.katz.comport;
 
+import by.katz.Log;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  * Created by katz on 17.06.2017.
  */
+@Deprecated
 class PortSpeedSelector {
 
     private static ArrayList<Integer> speeds;
@@ -22,9 +25,9 @@ class PortSpeedSelector {
     }
 
     static void showSpeeds() {
-        System.out.println("Select speed: ");
+        Log.log("Select speed: ");
         for (int i = 0; i < speeds.size(); i++)
-            System.out.println(i + ": " + speeds.get(i));
+            Log.log(i + ": " + speeds.get(i));
     }
 
     static int getSpeed(int index) {
@@ -32,7 +35,7 @@ class PortSpeedSelector {
     }
 
     public static int readPortNumber() {
-        System.out.println("Select port");
+        Log.log("Select port");
         return input.nextInt();
     }
 }

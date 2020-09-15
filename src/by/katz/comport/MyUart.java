@@ -1,5 +1,6 @@
 package by.katz.comport;
 
+import by.katz.Log;
 import by.katz.gamepad.GamePad;
 import gnu.io.*;
 
@@ -17,27 +18,30 @@ public class MyUart {
     SerialReader serialReader;
 
     public MyUart(CommPortIdentifier port, int speed) throws UnsupportedCommOperationException, IOException, PortInUseException {
-            commPort = port.open(this.getClass().getName(), 2000);
+        commPort = port.open(this.getClass().getName(), 2000);
 
-            SerialPort serialPort = (SerialPort) commPort;
-            serialPort.setSerialPortParams(speed, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+        SerialPort serialPort = (SerialPort) commPort;
+        serialPort.setSerialPortParams(speed, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 
-            InputStream in = serialPort.getInputStream();
-            serialReader = new SerialReader(in);
+        InputStream in = serialPort.getInputStream();
+        serialReader = new SerialReader(in);
 
-            serialReader.start();
-            System.out.println("Port opened");
+        serialReader.start();
+        Log.log("Port opened");
     }
 
 
     public void stop() {
-        System.out.println("Try to close port .");
+        Log.log("Try to close port .");
         try {
             serialReader.stopReader();
             commPort.close();
         } catch (Exception e) {
             e.printStackTrace();
+
+            Log.log("Error, while closing port! " + e.getLocalizedMessage());
         }
+        Log.log("Port closed");
     }
 
 

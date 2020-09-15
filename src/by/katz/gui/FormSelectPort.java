@@ -1,12 +1,19 @@
 package by.katz.gui;
 
+import by.katz.Log;
 import by.katz.comport.MyUart;
 import by.katz.comport.PortEnumerator;
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import gnu.io.UnsupportedCommOperationException;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -22,23 +29,29 @@ public class FormSelectPort extends JFrame {
     private JButton btnOpenClosePort;
     private JPanel pnlMain;
     private JList<String> lstComPorts;
+    private JTextArea txtLog;
     private MyUart uart;
 
     private STATE state = CLOSED;
 
-    final ArrayList<CommPortIdentifier> ports = PortEnumerator.getPorts();
+    private final ArrayList<CommPortIdentifier> ports;
 
 
     public FormSelectPort() {
 
-        initVisible();
+        setIconImage(Toolkit.getDefaultToolkit().getImage("GamePad.png"));
+        Log.bindTxtView(txtLog);
+        ports = PortEnumerator.getPorts();
 
-        setTitle("GamePad");
+        setTitle("Sega Megadrive Gamepad driver");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setContentPane(pnlMain);
         pack();
+        setSize(500, 400);
         setLocationRelativeTo(null);
         setVisible(true);
+
+        initVisible();
     }
 
     private void initVisible() {
@@ -47,6 +60,20 @@ public class FormSelectPort extends JFrame {
         for (CommPortIdentifier p : ports)
             listModel.addElement(p.getName() + " " + getPortTypeName(p.getPortType()));
         lstComPorts.setModel(listModel);
+        lstComPorts.addMouseListener(new MouseListener() {
+            @Override public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2 && state == CLOSED)
+                    openClosePort();
+            }
+
+            @Override public void mousePressed(MouseEvent e) { }
+
+            @Override public void mouseReleased(MouseEvent e) { }
+
+            @Override public void mouseEntered(MouseEvent e) { }
+
+            @Override public void mouseExited(MouseEvent e) { }
+        });
         btnOpenClosePort.addActionListener(e -> openClosePort());
     }
 
@@ -57,7 +84,10 @@ public class FormSelectPort extends JFrame {
             CommPortIdentifier port = ports.get(lstComPorts.getSelectedIndex());
             try {
                 uart = new MyUart(port, 115200);
-                Runtime.getRuntime().addShutdownHook(new Thread(uart::stop));
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    Log.log("Shutdown hook");
+                    uart.stop();
+                }));
                 btnOpenClosePort.setText("Close port");
                 state = OPENED;
             } catch (UnsupportedCommOperationException | IOException | PortInUseException e2) {
