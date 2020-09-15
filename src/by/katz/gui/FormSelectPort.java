@@ -1,6 +1,7 @@
 package by.katz.gui;
 
 import by.katz.Log;
+import by.katz.Main;
 import by.katz.comport.MyUart;
 import by.katz.comport.PortEnumerator;
 import gnu.io.CommPortIdentifier;
@@ -15,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import static by.katz.comport.PortEnumerator.getPortTypeName;
@@ -39,7 +41,9 @@ public class FormSelectPort extends JFrame {
 
     public FormSelectPort() {
 
-        setIconImage(Toolkit.getDefaultToolkit().getImage("GamePad.png"));
+        URL url = Main.class.getResource("/GamePad.png");
+        setIconImage(Toolkit.getDefaultToolkit().getImage(url));
+
         Log.bindTxtView(txtLog);
         ports = PortEnumerator.getPorts();
 
