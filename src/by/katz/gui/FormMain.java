@@ -1,10 +1,11 @@
 package by.katz.gui;
 
-import by.katz.keys.KeyMap;
 import by.katz.Log;
 import by.katz.Main;
+import by.katz.Settings;
 import by.katz.comport.MyUart;
 import by.katz.comport.PortEnumerator;
+import by.katz.keys.KeyMap;
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import gnu.io.UnsupportedCommOperationException;
@@ -83,6 +84,7 @@ public class FormMain extends JFrame {
         btnOpenClosePort.addActionListener(e -> openClosePort());
         btnSaveKeyMap.addActionListener(e -> KeyMap.saveKeyMap(edtKeymapName.getText()));
         btnLoadKeymap.addActionListener(e -> KeyMap.loadKeyMap(edtKeymapName.getText()));
+        edtKeymapName.setText(Settings.getInstance().getLastUsedKeymap());
     }
 
 

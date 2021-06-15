@@ -48,3 +48,4 @@ build/
 settings
 /temp.html
 *.kmap
+gp_settings.json

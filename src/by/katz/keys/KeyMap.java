@@ -1,5 +1,6 @@
 package by.katz.keys;
 
+import by.katz.Settings;
 import com.google.gson.GsonBuilder;
 
 import java.io.FileReader;
@@ -85,7 +86,10 @@ public class KeyMap {
             fw.write(json);
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
+        Settings.getInstance().setLastUsedKeymap(name);
+        Settings.getInstance().saveSettings();
     }
 
     public static void loadKeyMap(String name) {
@@ -96,7 +100,10 @@ public class KeyMap {
                     .fromJson(fr, KeyMap.class);
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
+        Settings.getInstance().setLastUsedKeymap(name);
+        Settings.getInstance().saveSettings();
     }
 
     public int getKeyUp() {

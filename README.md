@@ -2,7 +2,9 @@
 
 [Arduino scetch](Arduino_project)
 
-Connecting:
+Connecting pinout
+ ![alt text](docs/0pV605n[1].png "Connecting pinout")
 
-![alt text](docs/0pV605n[1].png "Описание будет тут")
 
+Example app
+![alt text](docs/application.png "Example app")
