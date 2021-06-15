@@ -19,7 +19,11 @@ public class Log {
         logString = sdf.format(new Date()) + "\t" + logString;
 
         System.out.println(logString);
-        if (txtLog != null)
-            txtLog.setText(txtLog.getText() + (txtLog.getText().length() > 0 ? "\r\n" : "") + logString);
+        if (txtLog == null)
+            return;
+        if (txtLog.getText().length() > 2000)
+            txtLog.setText(txtLog.getText().substring(500));
+
+        txtLog.setText(logString + "\r\n" + txtLog.getText());
     }
 }

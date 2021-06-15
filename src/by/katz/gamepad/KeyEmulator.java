@@ -1,7 +1,8 @@
 package by.katz.gamepad;
 
+import by.katz.keys.KeyMap;
+
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,51 +29,51 @@ class KeyEmulator {
     }
 
     void pressArrowUp(boolean state) {
-        keystroke(KeyEvent.VK_UP, state);
+        keystroke(KeyMap.get().getKeyUp(), state);
     }
 
     void pressArrowDown(boolean state) {
-        keystroke(KeyEvent.VK_DOWN, state);
+        keystroke(KeyMap.get().getKeyDown(), state);
     }
 
     void pressArrowLeft(boolean state) {
-        keystroke(KeyEvent.VK_LEFT, state);
+        keystroke(KeyMap.get().getKeyLeft(), state);
     }
 
     void pressArrowRight(boolean state) {
-        keystroke(KeyEvent.VK_RIGHT, state);
+        keystroke(KeyMap.get().getKeyRight(), state);
     }
 
     void pressX(boolean state) {
-        keystroke(KeyEvent.VK_X, state);
+        keystroke(KeyMap.get().getKeyX(), state);
     }
 
     void pressY(boolean state) {
-        keystroke(KeyEvent.VK_Y, state);
+        keystroke(KeyMap.get().getKeyY(), state);
     }
 
     void pressZ(boolean state) {
-        keystroke(KeyEvent.VK_Z, state);
+        keystroke(KeyMap.get().getKeyZ(), state);
     }
 
     void pressA(boolean state) {
-        keystroke(KeyEvent.VK_A, state);
+        keystroke(KeyMap.get().getKeyA(), state);
     }
 
     void pressB(boolean state) {
-        keystroke(KeyEvent.VK_B, state);
+        keystroke(KeyMap.get().getKeyB(), state);
     }
 
     void pressC(boolean state) {
-        keystroke(KeyEvent.VK_C, state);
+        keystroke(KeyMap.get().getKeyC(), state);
     }
 
     void pressEnter(boolean state) {
-        keystroke(KeyEvent.VK_ENTER, state);
+        keystroke(KeyMap.get().getKeyStart(), state);
     }
 
     void pressBackSpace(boolean state) {
-        keystroke(KeyEvent.VK_BACK_SPACE, state);
+        keystroke(KeyMap.get().getKeyMode(), state);
     }
 
     private Set<Integer> states = new HashSet<>();
@@ -86,5 +87,9 @@ class KeyEmulator {
             states.remove(key);
             robot.keyRelease(key);
         }
+    }
+
+    public Robot getRobot() {
+        return robot;
     }
 }

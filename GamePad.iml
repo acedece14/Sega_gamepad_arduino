@@ -31,5 +31,7 @@
     <orderEntry type="library" name="jgoodies-common-1.8.1" level="project" />
     <orderEntry type="library" name="jgoodies-forms-1.9.0" level="project" />
     <orderEntry type="library" name="JTattoo-1.6.11" level="project" />
+    <orderEntry type="library" name="converter-gson-2.9.0" level="project" />
+    <orderEntry type="library" name="gson-2.8.6" level="project" />
   </component>
 </module>

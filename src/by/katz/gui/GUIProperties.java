@@ -6,6 +6,7 @@ import javax.swing.*;
  * //
  * Created by katz on 26.05.2017.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class GUIProperties {
     public static final boolean IS_CUSTOM_ENABLED = false;
     // see definition in class com.jtattoo.plaf.texture.TextureUtils

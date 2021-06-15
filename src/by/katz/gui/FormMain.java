@@ -1,5 +1,6 @@
 package by.katz.gui;
 
+import by.katz.keys.KeyMap;
 import by.katz.Log;
 import by.katz.Main;
 import by.katz.comport.MyUart;
@@ -8,21 +9,19 @@ import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import gnu.io.UnsupportedCommOperationException;
 
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
 import static by.katz.comport.PortEnumerator.getPortTypeName;
-import static by.katz.gui.FormSelectPort.STATE.*;
+import static by.katz.gui.FormMain.STATE.CLOSED;
+import static by.katz.gui.FormMain.STATE.OPENED;
 
-public class FormSelectPort extends JFrame {
+public class FormMain extends JFrame {
     enum STATE {
         CLOSED,
         OPENED
@@ -32,6 +31,9 @@ public class FormSelectPort extends JFrame {
     private JPanel pnlMain;
     private JList<String> lstComPorts;
     private JTextArea txtLog;
+    private JTextField edtKeymapName;
+    private JButton btnSaveKeyMap;
+    private JButton btnLoadKeymap;
     private MyUart uart;
 
     private STATE state = CLOSED;
@@ -39,7 +41,7 @@ public class FormSelectPort extends JFrame {
     private final ArrayList<CommPortIdentifier> ports;
 
 
-    public FormSelectPort() {
+    public FormMain() {
 
         URL url = Main.class.getResource("/GamePad.png");
         setIconImage(Toolkit.getDefaultToolkit().getImage(url));
@@ -79,6 +81,8 @@ public class FormSelectPort extends JFrame {
             @Override public void mouseExited(MouseEvent e) { }
         });
         btnOpenClosePort.addActionListener(e -> openClosePort());
+        btnSaveKeyMap.addActionListener(e -> KeyMap.saveKeyMap(edtKeymapName.getText()));
+        btnLoadKeymap.addActionListener(e -> KeyMap.loadKeyMap(edtKeymapName.getText()));
     }
 
 
@@ -106,4 +110,6 @@ public class FormSelectPort extends JFrame {
             state = CLOSED;
         }
     }
+
+
 }

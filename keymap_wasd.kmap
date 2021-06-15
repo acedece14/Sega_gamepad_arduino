@@ -1,0 +1,14 @@
+{
+  "keyA": "VK_NUMPAD1",
+  "keyB": "VK_NUMPAD2",
+  "keyC": "VK_NUMPAD3",
+  "keyX": "VK_NUMPAD4",
+  "keyY": "VK_NUMPAD5",
+  "keyZ": "VK_NUMPAD6",
+  "keyUp": "VK_W",
+  "keyDown": "VK_S",
+  "keyLeft": "VK_A",
+  "keyRight": "VK_D",
+  "keyStart": "VK_ENTER",
+  "keyMode": "VK_BACK_SPACE"
+}

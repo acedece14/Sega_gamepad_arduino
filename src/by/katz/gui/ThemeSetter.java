@@ -37,8 +37,5 @@ public class ThemeSetter {
         }
     }
 
-    private static int getRand(int min, int max) {
-        Random rand = new Random();
-        return rand.nextInt((max - min) + 1) + min;
-    }
+    private static int getRand(int min, int max) { return new Random().nextInt((max - min) + 1) + min; }
 }
