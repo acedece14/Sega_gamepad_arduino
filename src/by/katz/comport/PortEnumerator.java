@@ -15,17 +15,21 @@ public class PortEnumerator {
     public static ArrayList<CommPortIdentifier> getPorts() {
 
         ArrayList<CommPortIdentifier> ports = new ArrayList<>();
+        //noinspection unchecked
         Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
 
         int number = 0;
-        Log.log("Available COM-ports");
-        Log.log("Number : description");
+        StringBuilder res = new StringBuilder("Available COM-ports\n");
         while (portEnum.hasMoreElements()) {
             CommPortIdentifier portIdentifier = portEnum.nextElement();
             ports.add(portIdentifier);
-            Log.log(number++ + " : (" + getPortTypeName(portIdentifier.getPortType()) + ") " + portIdentifier.getName());
-
+            res.append(String.format("\t%d : (%s) %s\n",
+                    number++,
+                    getPortTypeName(portIdentifier.getPortType()),
+                    portIdentifier.getName())
+            );
         }
+        Log.log(res.toString().trim());
         return ports;
     }
 

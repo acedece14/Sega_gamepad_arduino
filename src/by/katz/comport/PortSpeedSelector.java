@@ -8,7 +8,7 @@ import java.util.Scanner;
 /**
  * Created by katz on 17.06.2017.
  */
-@Deprecated
+ 
 class PortSpeedSelector {
 
     private static ArrayList<Integer> speeds;

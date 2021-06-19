@@ -47,19 +47,19 @@ public interface NativeKeyListener extends EventListener {
 	 *
 	 * @since 1.1
 	 */
-	public void nativeKeyTyped(NativeKeyEvent nativeEvent);
+    void nativeKeyTyped(NativeKeyEvent nativeEvent);
 
 	/**
 	 * Invoked when a key has been pressed.
 	 *
 	 * @param nativeEvent the native key event.
 	 */
-	public void nativeKeyPressed(NativeKeyEvent nativeEvent);
+    void nativeKeyPressed(NativeKeyEvent nativeEvent);
 
 	/**
 	 * Invoked when a key has been released.
 	 *
 	 * @param nativeEvent the native key event.
 	 */
-	public void nativeKeyReleased(NativeKeyEvent nativeEvent);
+    void nativeKeyReleased(NativeKeyEvent nativeEvent);
 }

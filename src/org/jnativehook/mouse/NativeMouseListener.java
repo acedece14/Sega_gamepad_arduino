@@ -47,19 +47,19 @@ public interface NativeMouseListener extends EventListener {
 	 *
 	 * @param nativeEvent the native mouse event.
 	 */
-	public void nativeMouseClicked(NativeMouseEvent nativeEvent);
+    void nativeMouseClicked(NativeMouseEvent nativeEvent);
 
 	/**
 	 * Invoked when a mouse button has been pressed
 	 *
 	 * @param nativeEvent the native mouse event.
 	 */
-	public void nativeMousePressed(NativeMouseEvent nativeEvent);
+    void nativeMousePressed(NativeMouseEvent nativeEvent);
 
 	/**
 	 * Invoked when a mouse button has been released
 	 *
 	 * @param nativeEvent the native mouse event.
 	 */
-	public void nativeMouseReleased(NativeMouseEvent nativeEvent);
+    void nativeMouseReleased(NativeMouseEvent nativeEvent);
 }

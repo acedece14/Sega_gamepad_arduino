@@ -1,47 +1,28 @@
 package by.katz.keys;
 
+import by.katz.Log;
 import by.katz.Settings;
 import com.google.gson.GsonBuilder;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class KeyMap {
 
     private static final Map<String, Integer> keys = new HashMap<>();
+    private static final String FILE_PREFIX = "keymap_";
+    private static final String FILE_EXT = ".kmap";
 
-
-    private KeyMap() throws Exception { }
-
-    private static void loadKeys() {
-        try {
-            final Field[] fields = java.awt.event.KeyEvent.class.getDeclaredFields();
-            for (Field f : fields)
-                if (Modifier.isStatic(f.getModifiers()) && !Modifier.isPrivate(f.getModifiers()))
-                    keys.put(f.getName(), f.getInt(null));
-        } catch (IllegalAccessException ignored) { }
-        System.out.println("Keys loaded");
-    }
-
-    private static KeyMap instance;
-
-    public static KeyMap get() {
-        if (instance == null) {
-            loadKeys();
-            try {
-                instance = new KeyMap();
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.exit(1);
-            }
-        }
-        return instance;
-    }
 
     private int keyUp = getKeyCodeByName("VK_UP");
     private int keyDown = getKeyCodeByName("VK_DOWN");
@@ -59,7 +40,40 @@ public class KeyMap {
     private int keyStart = getKeyCodeByName("VK_ENTER");
     private int keyMode = getKeyCodeByName("VK_BACK_SPACE");
 
-    public static int getKeyCodeByName(String keyName) throws Exception {
+    private KeyMap() throws Exception { }
+
+    private static KeyMap instance;
+
+    public static KeyMap get() {
+        if (instance == null) {
+            loadKeys();
+            try {
+                instance = new KeyMap();
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
+        }
+        return instance;
+    }
+
+    public static List<String> getAvailableKeymaps() {
+        List<String> list = new ArrayList<>();
+
+        try {
+            Files.walk(new File(".").toPath(), 1, FileVisitOption.FOLLOW_LINKS)
+                    .filter(f -> f.toString().endsWith(FILE_EXT))
+                    .sorted().forEach(f -> list.add(f.getFileName()
+                    .toString()
+                    .split("\\.")[0]
+                    .replace(FILE_PREFIX, "")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    static int getKeyCodeByName(String keyName) throws Exception {
         if (keys.containsKey(keyName))
             return keys.get(keyName);
         else {
@@ -76,8 +90,19 @@ public class KeyMap {
         return "UNKNOWN!";
     }
 
+    private static void loadKeys() {
+        try {
+            final Field[] fields = java.awt.event.KeyEvent.class.getDeclaredFields();
+            for (Field f : fields)
+                if (Modifier.isStatic(f.getModifiers()) && !Modifier.isPrivate(f.getModifiers()))
+                    keys.put(f.getName(), f.getInt(null));
+        } catch (IllegalAccessException ignored) { }
+        Log.log("System keycodes loaded");
+    }
+
     public static void saveKeyMap(String name) {
-        try (FileWriter fw = new FileWriter("keymap_" + name + ".kmap")) {
+        File file = new File(FILE_PREFIX + name + FILE_EXT);
+        try (FileWriter fw = new FileWriter(file)) {
 
             String json = new GsonBuilder().setPrettyPrinting()
                     .registerTypeAdapter(KeyMap.class, new KeysSerializer())
@@ -89,21 +114,23 @@ public class KeyMap {
             return;
         }
         Settings.getInstance().setLastUsedKeymap(name);
-        Settings.getInstance().saveSettings();
+        Log.log("Saved to" + file.getAbsolutePath());
     }
 
     public static void loadKeyMap(String name) {
-        try (FileReader fr = new FileReader("keymap_" + name + ".kmap")) {
+        final File file = new File(FILE_PREFIX + name + FILE_EXT);
+        try (FileReader fr = new FileReader(file)) {
             instance = new GsonBuilder().setPrettyPrinting()
                     .registerTypeAdapter(KeyMap.class, new KeysSerializer())
                     .create()
                     .fromJson(fr, KeyMap.class);
         } catch (IOException e) {
+            Log.log("Cant load from " + file.getAbsolutePath());
             e.printStackTrace();
             return;
         }
         Settings.getInstance().setLastUsedKeymap(name);
-        Settings.getInstance().saveSettings();
+        Log.log("Loaded from: " + file.getAbsolutePath());
     }
 
     public int getKeyUp() {
@@ -154,7 +181,7 @@ public class KeyMap {
         return keyMode;
     }
 
-    public void setKeyUp(int keyUp) {
+    void setKeyUp(int keyUp) {
         this.keyUp = keyUp;
     }
 
@@ -166,39 +193,39 @@ public class KeyMap {
         this.keyLeft = keyLeft;
     }
 
-    public void setKeyRight(int keyRight) {
+    void setKeyRight(int keyRight) {
         this.keyRight = keyRight;
     }
 
-    public void setKeyA(int keyA) {
+    void setKeyA(int keyA) {
         this.keyA = keyA;
     }
 
-    public void setKeyB(int keyB) {
+    void setKeyB(int keyB) {
         this.keyB = keyB;
     }
 
-    public void setKeyC(int keyC) {
+    void setKeyC(int keyC) {
         this.keyC = keyC;
     }
 
-    public void setKeyX(int keyX) {
+    void setKeyX(int keyX) {
         this.keyX = keyX;
     }
 
-    public void setKeyY(int keyY) {
+    void setKeyY(int keyY) {
         this.keyY = keyY;
     }
 
-    public void setKeyZ(int keyZ) {
+    void setKeyZ(int keyZ) {
         this.keyZ = keyZ;
     }
 
-    public void setKeyStart(int keyStart) {
+    void setKeyStart(int keyStart) {
         this.keyStart = keyStart;
     }
 
-    public void setKeyMode(int keyMode) {
+    void setKeyMode(int keyMode) {
         this.keyMode = keyMode;
     }
 }

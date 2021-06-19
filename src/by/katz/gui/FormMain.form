@@ -11,6 +11,8 @@
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:max(d;4px):noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="bottom:m:noGrow"/>
     <colspec value="fill:88px:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
@@ -42,7 +44,7 @@
       </hspacer>
       <scrollpane id="5e446">
         <constraints>
-          <grid row="0" column="6" row-span="11" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="6" row-span="13" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties/>
@@ -50,13 +52,15 @@
         <children>
           <component id="70540" class="javax.swing.JTextArea" binding="txtLog">
             <constraints/>
-            <properties/>
+            <properties>
+              <lineWrap value="true"/>
+            </properties>
           </component>
         </children>
       </scrollpane>
       <component id="33925" class="javax.swing.JTextField" binding="edtKeymapName">
         <constraints>
-          <grid row="6" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="8" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
           <forms defaultalign-horz="false"/>
@@ -65,7 +69,7 @@
       </component>
       <component id="f84be" class="javax.swing.JButton" binding="btnSaveKeyMap">
         <constraints>
-          <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -74,7 +78,7 @@
       </component>
       <component id="297be" class="javax.swing.JButton" binding="btnLoadKeymap">
         <constraints>
-          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -97,6 +101,16 @@
         </constraints>
         <properties>
           <text value="Keymap"/>
+        </properties>
+      </component>
+      <component id="9dee8" class="javax.swing.JComboBox" binding="cbKeymaps">
+        <constraints>
+          <grid row="6" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <model/>
+          <toolTipText value="keymaps"/>
         </properties>
       </component>
     </children>

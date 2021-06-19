@@ -1,5 +1,6 @@
 package by.katz.gamepad;
 
+import by.katz.Log;
 import by.katz.keys.KeyMap;
 
 import java.awt.*;
@@ -79,6 +80,8 @@ class KeyEmulator {
     private Set<Integer> states = new HashSet<>();
 
     private void keystroke(int key, boolean state) {
+
+        Log.log("KEY: " + KeyMap.getKeyNameByCode(key) + " state: " + (state ? "Press" : "Release"));
         if (state && !states.contains(key)) {
             states.add(key);
             robot.keyPress(key);

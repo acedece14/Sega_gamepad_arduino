@@ -1,7 +1,9 @@
 package by.katz.gamepad;
 
 import by.katz.Log;
+import by.katz.keys.KeyMap;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -85,7 +87,13 @@ public class GamePad {
         try {
             value = Integer.valueOf(args);
         } catch (NumberFormatException e) {
-            Log.log("error decode: " + e);
+
+            byte[] bytes = args.getBytes();
+            String res = "";
+            for (byte aByte : bytes)
+                res += "#" + (int) aByte + " ";
+            Toolkit.getDefaultToolkit().beep();
+            Log.log("error decode: " + res);
             e.printStackTrace();
             //System.exit(1);
             return;
@@ -101,7 +109,6 @@ public class GamePad {
     }
 
     private void applyButton(int key, boolean state) {
-        Log.log( "KEY: " + key + " state: " + state);
         switch (key) {
             case UP:
                 KeyEmulator.getInstance().pressArrowUp(state);

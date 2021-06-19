@@ -13,9 +13,14 @@ public class Settings {
     private static File SETTINGS_FILE = new File("gp_settings.json");
     private static Settings instance;
 
-    private Settings() {}
 
     private String lastUsedKeymap = "";
+    private String lastOpenedPort;
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
+    private boolean isNeedDarkTheme = false;
+
+    private Settings() {}
+
 
     public static Settings getInstance() {
         if (instance == null)
@@ -29,6 +34,7 @@ public class Settings {
 
     public void setLastUsedKeymap(String lastUsedKeymap) {
         this.lastUsedKeymap = lastUsedKeymap;
+        saveSettings();
     }
 
 
@@ -44,12 +50,25 @@ public class Settings {
         }
     }
 
-    public void saveSettings() {
+    private void saveSettings() {
         try (FileWriter fileWriter = new FileWriter(SETTINGS_FILE)) {
             fileWriter.write(new GsonBuilder().setPrettyPrinting().create().toJson(this));
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
+    }
+
+    public void setLastOpenedPort(String lastOpenedPort) {
+        this.lastOpenedPort = lastOpenedPort;
+        saveSettings();
+    }
+
+    public String getLastOpenedPort() {
+        return lastOpenedPort;
+    }
+
+    boolean isNeedDarkTheme() {
+        return isNeedDarkTheme;
     }
 }

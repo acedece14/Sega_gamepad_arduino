@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class Log {
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:sss");
+    private static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
 
     private static JTextArea txtLog;
 

@@ -42,5 +42,5 @@ public interface NativeLibraryLocator {
 	 *
 	 * @return Iterator of type file, where each file points to a native library to load.
 	 */
-	public Iterator<File> getLibraries();
+    Iterator<File> getLibraries();
 }

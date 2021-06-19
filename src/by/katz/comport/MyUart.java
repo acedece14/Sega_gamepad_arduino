@@ -1,10 +1,8 @@
 package by.katz.comport;
 
 import by.katz.Log;
-import by.katz.gamepad.GamePad;
 import gnu.io.*;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -33,7 +31,6 @@ public class MyUart {
 
         InputStream in = serialPort.getInputStream();
         serialReader = new SerialReader(in);
-
         serialReader.start();
         Log.log("Port opened");
     }
@@ -52,47 +49,14 @@ public class MyUart {
         Log.log("Port closed");
     }
 
-    private class SerialReader extends Thread {
+    private static StringBuilder resultBytes = new StringBuilder();
 
-        private DataInputStream in;
-        private boolean isStop = false;
-
-        void stopReader() {
-            isStop = true;
-        }
-
-        SerialReader(InputStream in) {
-            this.in = new DataInputStream(in);
-        }
-
-        public void run() {
-            byte[] buffer = new byte[2048];
-            int len;
-            try {
-                StringBuilder totalData = new StringBuilder();
-                while ((!isStop) && (len = this.in.read(buffer)) > -1) {
-
-                    if (len > 0) {
-                        String rez = getStringFromBytes(buffer, len);
-                        totalData.append(rez);
-                    }
-                    if (totalData.toString().endsWith("\r\n")) {
-                        GamePad.getInstance().runCommand(totalData.toString().trim());
-                        totalData = new StringBuilder();
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.log("Error while read input buffer");
-            }
-        }
-    }
-
-    private static String getStringFromBytes(byte[] buffer, int len) {
-        StringBuilder result = new StringBuilder();
+    static String getStringFromBytes(byte[] buffer, int len) {
+        //StringBuilder resultBytes = new StringBuilder();
+        resultBytes.setLength(0);
         for (int i = 0; i < len; i++)
-            result.append((char) buffer[i]);
-        return result.toString();
+            resultBytes.append((char) buffer[i]);
+        return resultBytes.toString();
 
     }
 }
