@@ -81,6 +81,7 @@ public class DialogEditKeymap extends JDialog {
                 JTextField edt = (JTextField) e.getComponent();
                 Log.log("Key: " + e.getKeyCode() + " " + KeyMap.getKeyNameByCode(e.getKeyCode()));
                 edt.setText(KeyMap.getKeyNameByCode(e.getKeyCode()));
+                edt.transferFocus();
             }
         };
         setKeyListener(keyListener, edtUp, edtDown, edtLeft, edtRight,
@@ -94,10 +95,7 @@ public class DialogEditKeymap extends JDialog {
     }
 
     private void onOK() {
-        // add your code here
-
         KeyMap keyMap = KeyMap.get();
-
         try {
             keyMap.setKeyUp(KeyMap.getKeyCodeByName(edtUp.getText()));
             keyMap.setKeyDown(KeyMap.getKeyCodeByName(edtDown.getText()));
@@ -119,17 +117,8 @@ public class DialogEditKeymap extends JDialog {
             JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
-
         dispose();
     }
 
     private void onCancel() { dispose(); }
-
-    public static void main(String[] args) {
-        DialogEditKeymap dialog = new DialogEditKeymap();
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
-    }
 }

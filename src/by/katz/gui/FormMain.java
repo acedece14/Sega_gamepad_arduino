@@ -7,7 +7,6 @@ import by.katz.comport.MyUart;
 import by.katz.comport.PortEnumerator;
 import by.katz.gamepad.KeyEmulator;
 import by.katz.keys.KeyMap;
-import by.katz.keys.MouseClickListenerImpl;
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import gnu.io.UnsupportedCommOperationException;
@@ -16,6 +15,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import static by.katz.gui.FormMain.STATE.OPENED;
 
 public class FormMain extends JFrame {
 
-    public static final int PORT_SPEED = 115200;
+    private static final int PORT_SPEED = 115200;
 
     enum STATE {
         CLOSED,
@@ -103,23 +103,30 @@ public class FormMain extends JFrame {
     private void createTrayIcon() throws IOException, AWTException {
 
         if (SystemTray.isSupported()) {
-            SystemTray tray = SystemTray.getSystemTray();
+            final SystemTray tray = SystemTray.getSystemTray();
 
-            Image image = ImageIO.read(Objects.requireNonNull(FormMain.class.getClassLoader()
+            final Image image = ImageIO.read(Objects.requireNonNull(FormMain.class.getClassLoader()
                     .getResourceAsStream("tray.png")));
-            PopupMenu popup = new PopupMenu();
-            MenuItem miShowHide = new MenuItem("Open/hide");
-            MenuItem miExit = new MenuItem("Exit");
+            final PopupMenu popup = new PopupMenu();
+            final MenuItem miShowHide = new MenuItem("Open/hide");
             miShowHide.addActionListener(a -> showHideForm());
-            miExit.addActionListener(a -> FormMain.this.dispose());
+            final MenuItem miExit = new MenuItem("Exit");
+            miExit.addActionListener(a -> FormMain.this.dispatchEvent(new WindowEvent(FormMain.this, WindowEvent.WINDOW_CLOSING)));
+
             popup.add(miShowHide);
             popup.add(miExit);
 
-            TrayIcon trayIcon = new TrayIcon(image, "Gamepad", popup);
-            trayIcon.addMouseListener(new TrayLeftClickListener(this));
+            final TrayIcon trayIcon = new TrayIcon(image, "Gamepad", popup);
+            trayIcon.addMouseListener(new MouseClickListenerImpl() {
+                @Override public void mouseClicked(MouseEvent e) {
+                    if (e.getButton() != MouseEvent.BUTTON1)
+                        return;
+                    setVisible(!isVisible());
+                    setState(Frame.NORMAL);
+                }
+            });
             tray.add(trayIcon);
         }
-
     }
 
     private void showHideForm() { setVisible(!isVisible()); }
@@ -165,10 +172,6 @@ public class FormMain extends JFrame {
             uart = new MyUart(port, PORT_SPEED);
             try {
                 uart.start();
-                /*Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                    Log.log("Shutdown hook");
-                    uart.stop();
-                }));*/
                 btnOpenClosePort.setText("Close port");
                 state = OPENED;
                 Settings.getInstance().setLastOpenedPort(port.getName());

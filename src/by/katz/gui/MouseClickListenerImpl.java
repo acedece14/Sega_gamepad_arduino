@@ -3,13 +3,8 @@ package by.katz.gui;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class TrayLeftClickListener implements MouseListener {
-
-    private FormMain formMain;
-
-    TrayLeftClickListener(FormMain formMain) { this.formMain = formMain; }
-
-    @Override public void mouseClicked(MouseEvent e) { formMain.setVisible(!formMain.isVisible()); }
+public class MouseClickListenerImpl implements MouseListener {
+    @Override public void mouseClicked(MouseEvent e) { }
 
     @Override public void mousePressed(MouseEvent e) { }
 
