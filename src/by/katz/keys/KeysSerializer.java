@@ -60,7 +60,7 @@ public class KeysSerializer
         return keyMap;
     }
 
-    private int revealKey(String key, JsonObject data) throws Exception {
+    private static int revealKey(String key, JsonObject data) throws Exception {
         String temp = String.valueOf(data.get(key));
         temp = temp.substring(1, temp.length() - 1);
         return KeyMap.getKeyCodeByName(temp);

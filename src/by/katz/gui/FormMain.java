@@ -5,7 +5,9 @@ import by.katz.Main;
 import by.katz.Settings;
 import by.katz.comport.MyUart;
 import by.katz.comport.PortEnumerator;
+import by.katz.gamepad.KeyEmulator;
 import by.katz.keys.KeyMap;
+import by.katz.keys.MouseClickListenerImpl;
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import gnu.io.UnsupportedCommOperationException;
@@ -14,7 +16,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -25,6 +26,9 @@ import static by.katz.gui.FormMain.STATE.CLOSED;
 import static by.katz.gui.FormMain.STATE.OPENED;
 
 public class FormMain extends JFrame {
+
+    public static final int PORT_SPEED = 115200;
+
     enum STATE {
         CLOSED,
         OPENED
@@ -38,6 +42,9 @@ public class FormMain extends JFrame {
     private JButton btnSaveKeyMap;
     private JButton btnLoadKeymap;
     private JComboBox<String> cbKeymaps;
+    private JCheckBox cbFastKeys;
+    private JButton btnUpdateKeymap;
+    private JButton btnEdit;
     private MyUart uart;
 
     private STATE state = CLOSED;
@@ -119,9 +126,7 @@ public class FormMain extends JFrame {
 
     private void initVisible() {
 
-        final DefaultComboBoxModel<String> cbModel = new DefaultComboBoxModel<>();
-        KeyMap.getAvailableKeymaps().forEach(cbModel::addElement);
-        cbKeymaps.setModel(cbModel);
+        updateKeymaps();
         cbKeymaps.addActionListener(a -> edtKeymapName.setText(String.valueOf(cbKeymaps.getSelectedItem())));
 
         final DefaultListModel<String> listModel = new DefaultListModel<>();
@@ -129,24 +134,27 @@ public class FormMain extends JFrame {
         for (CommPortIdentifier p : ports)
             listModel.addElement(p.getName() + " " + getPortTypeName(p.getPortType()));
         lstComPorts.setModel(listModel);
-        lstComPorts.addMouseListener(new MouseListener() {
+
+        lstComPorts.addMouseListener(new MouseClickListenerImpl() {
             @Override public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2 && state == CLOSED)
                     openClosePort();
             }
-
-            @Override public void mousePressed(MouseEvent e) { }
-
-            @Override public void mouseReleased(MouseEvent e) { }
-
-            @Override public void mouseEntered(MouseEvent e) { }
-
-            @Override public void mouseExited(MouseEvent e) { }
         });
         btnOpenClosePort.addActionListener(e -> openClosePort());
         btnSaveKeyMap.addActionListener(e -> KeyMap.saveKeyMap(edtKeymapName.getText()));
         btnLoadKeymap.addActionListener(e -> KeyMap.loadKeyMap(edtKeymapName.getText()));
         edtKeymapName.setText(Settings.getInstance().getLastUsedKeymap());
+        cbFastKeys.addActionListener(e -> KeyEmulator.setFastKeys(cbFastKeys.isSelected()));
+        btnUpdateKeymap.addActionListener(a -> updateKeymaps());
+        btnEdit.addActionListener(a -> new DialogEditKeymap());
+    }
+
+
+    private void updateKeymaps() {
+        final DefaultComboBoxModel<String> cbModel = new DefaultComboBoxModel<>();
+        KeyMap.getAvailableKeymaps().forEach(cbModel::addElement);
+        cbKeymaps.setModel(cbModel);
     }
 
 
@@ -154,7 +162,7 @@ public class FormMain extends JFrame {
 
         if (state == CLOSED) {
             CommPortIdentifier port = ports.get(lstComPorts.getSelectedIndex());
-            uart = new MyUart(port, 115200);
+            uart = new MyUart(port, PORT_SPEED);
             try {
                 uart.start();
                 /*Runtime.getRuntime().addShutdownHook(new Thread(() -> {

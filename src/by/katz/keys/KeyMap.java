@@ -73,12 +73,12 @@ public class KeyMap {
         return list;
     }
 
-    static int getKeyCodeByName(String keyName) throws Exception {
+    public static int getKeyCodeByName(String keyName) throws Exception {
         if (keys.containsKey(keyName))
             return keys.get(keyName);
         else {
             keys.forEach((k, v) -> System.out.println("key: " + k + " value:" + v));
-            throw new Exception("bad key: " + keyName);
+            throw new Exception("Unknown key: " + keyName + "!!!");
         }
     }
 
@@ -181,51 +181,51 @@ public class KeyMap {
         return keyMode;
     }
 
-    void setKeyUp(int keyUp) {
+    public void setKeyUp(int keyUp) {
         this.keyUp = keyUp;
     }
 
-    void setKeyDown(int keyDown) {
+    public void setKeyDown(int keyDown) {
         this.keyDown = keyDown;
     }
 
-    void setKeyLeft(int keyLeft) {
+    public void setKeyLeft(int keyLeft) {
         this.keyLeft = keyLeft;
     }
 
-    void setKeyRight(int keyRight) {
+    public void setKeyRight(int keyRight) {
         this.keyRight = keyRight;
     }
 
-    void setKeyA(int keyA) {
+    public void setKeyA(int keyA) {
         this.keyA = keyA;
     }
 
-    void setKeyB(int keyB) {
+    public void setKeyB(int keyB) {
         this.keyB = keyB;
     }
 
-    void setKeyC(int keyC) {
+    public void setKeyC(int keyC) {
         this.keyC = keyC;
     }
 
-    void setKeyX(int keyX) {
+    public void setKeyX(int keyX) {
         this.keyX = keyX;
     }
 
-    void setKeyY(int keyY) {
+    public void setKeyY(int keyY) {
         this.keyY = keyY;
     }
 
-    void setKeyZ(int keyZ) {
+    public void setKeyZ(int keyZ) {
         this.keyZ = keyZ;
     }
 
-    void setKeyStart(int keyStart) {
+    public void setKeyStart(int keyStart) {
         this.keyStart = keyStart;
     }
 
-    void setKeyMode(int keyMode) {
+    public void setKeyMode(int keyMode) {
         this.keyMode = keyMode;
     }
 }

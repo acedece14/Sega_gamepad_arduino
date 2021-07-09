@@ -1,7 +1,6 @@
 package by.katz.gamepad;
 
 import by.katz.Log;
-import by.katz.keys.KeyMap;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -85,16 +84,24 @@ public class GamePad {
     public void runCommand(String args) {
         int value;
         try {
-            value = Integer.valueOf(args);
+            if (args.contains("\r\n")) {
+                value = Integer.valueOf(args.split("\r\n")[0]);
+                runCommand(args.split("\r\n")[1]);
+                System.err.println("splitted data: " + args);
+            } else value = Integer.valueOf(args);
         } catch (NumberFormatException e) {
 
-            byte[] bytes = args.getBytes();
-            String res = "";
-            for (byte aByte : bytes)
-                res += "#" + (int) aByte + " ";
-            Toolkit.getDefaultToolkit().beep();
-            Log.log("error decode: " + res);
-            e.printStackTrace();
+            new Thread(() -> {
+
+                byte[] bytes = args.getBytes();
+                String res = "";
+                for (byte aByte : bytes)
+                    res += "#" + (int) aByte + " ";
+                Toolkit.getDefaultToolkit().beep();
+                Log.log("error decode: " + res);
+                e.printStackTrace();
+            }).start();
+
             //System.exit(1);
             return;
         }

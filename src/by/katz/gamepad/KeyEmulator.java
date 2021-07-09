@@ -4,6 +4,7 @@ import by.katz.Log;
 import by.katz.keys.KeyMap;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,12 +12,13 @@ import java.util.Set;
  * //
  * Created by katz on 17.06.2017.
  */
-class KeyEmulator {
+public class KeyEmulator {
 
     private static KeyEmulator instance;
+    private static boolean isUseFastKeys;
     private Robot robot;
 
-    private KeyEmulator() {
+    public KeyEmulator() {
         try {
             robot = new Robot();
         } catch (AWTException e) {
@@ -28,6 +30,8 @@ class KeyEmulator {
     static KeyEmulator getInstance() {
         return instance == null ? instance = new KeyEmulator() : instance;
     }
+
+    public static void setFastKeys(boolean selected) { isUseFastKeys = selected; }
 
     void pressArrowUp(boolean state) {
         keystroke(KeyMap.get().getKeyUp(), state);
@@ -74,14 +78,62 @@ class KeyEmulator {
     }
 
     void pressBackSpace(boolean state) {
-        keystroke(KeyMap.get().getKeyMode(), state);
+        long time = 50;
+        sleep(time);
+        if (isUseFastKeys && state) {
+            keystroke(KeyEvent.VK_RIGHT, true);
+            sleep(146);
+            keystroke(KeyEvent.VK_UP, true);
+            sleep(108);
+            keystroke(KeyEvent.VK_RIGHT, false);
+            sleep(80);
+            keystroke(KeyEvent.VK_LEFT, true);
+            sleep(119);
+            keystroke(KeyEvent.VK_UP, false);
+            sleep(22);
+            keystroke(KeyEvent.VK_DOWN, true);
+            sleep(25);
+            keystroke(KeyEvent.VK_LEFT, false);
+            sleep(16);
+            keystroke(KeyEvent.VK_RIGHT, true);
+            sleep(165);
+
+
+            keystroke(KeyEvent.VK_B, true);
+            sleep(14);
+            keystroke(KeyEvent.VK_A, true);
+            sleep(301);
+            keystroke(KeyEvent.VK_DOWN, false);
+            sleep(45);
+            keystroke(KeyEvent.VK_A, false);
+            sleep(5);
+            keystroke(KeyEvent.VK_RIGHT, false);
+            sleep(60);
+            keystroke(KeyEvent.VK_B, false);
+
+        } else keystroke(KeyMap.get().getKeyMode(), state);
+    }
+
+    private void sleep(long time) {
+        time = 20;
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private Set<Integer> states = new HashSet<>();
 
+
+    private long lastTime = 0;
+
     private void keystroke(int key, boolean state) {
 
-        Log.log("KEY: " + KeyMap.getKeyNameByCode(key) + " state: " + (state ? "Press" : "Release"));
+        long now = System.currentTimeMillis();
+        long time = now - lastTime;
+        lastTime = now;
+        Log.log("KEY: " + KeyMap.getKeyNameByCode(key) + " state: " + (state ? "Press" : "Release") + " T: " + time);
         if (state && !states.contains(key)) {
             states.add(key);
             robot.keyPress(key);
@@ -92,7 +144,4 @@ class KeyEmulator {
         }
     }
 
-    public Robot getRobot() {
-        return robot;
-    }
 }

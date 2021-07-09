@@ -9,7 +9,7 @@ import java.io.InputStream;
 
 class SerialReader extends Thread {
 
-    private DataInputStream in;
+    private InputStream in;
     private boolean isNeedStop = false;
 
     void stopReader() {
@@ -17,23 +17,26 @@ class SerialReader extends Thread {
     }
 
     SerialReader(InputStream in) {
-        this.in = new DataInputStream(in);
+        //this.in = new DataInputStream(in);
+        this.in = in;
     }
 
     public void run() {
         byte[] buffer = new byte[2048];
         int len;
         try {
-            StringBuilder totalData = new StringBuilder();
+            String  totalData ="";
             while ((!isNeedStop) && (len = this.in.read(buffer)) > -1) {
 
                 if (len > 0) {
                     String rez = MyUart.getStringFromBytes(buffer, len);
-                    totalData.append(rez);
+                    //totalData.append(rez);
+                    totalData += rez;
                 }
-                if (totalData.toString().endsWith("\r\n")) {
-                    GamePad.getInstance().runCommand(totalData.toString().trim());
-                    totalData.setLength(0);
+                if (totalData.endsWith("\r\n")) {
+                    GamePad.getInstance().runCommand(totalData.trim());
+                    //totalData.setLength(0);
+                    totalData = "";
                 }
             }
         } catch (IOException e) {
