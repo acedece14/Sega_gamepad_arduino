@@ -1,6 +1,7 @@
 package by.katz.comport;
 
 import by.katz.Log;
+import by.katz.Settings;
 import gnu.io.*;
 
 import java.io.IOException;
@@ -24,8 +25,7 @@ public class MyUart {
 
 
     public void start() throws UnsupportedCommOperationException, IOException, PortInUseException {
-        commPort = port.open(this.getClass().getName(), 2000);
-
+        commPort = port.open(this.getClass().getName(), Settings.getInstance().getSerialTimeout());
         SerialPort serialPort = (SerialPort) commPort;
         serialPort.setSerialPortParams(speed, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 
@@ -39,8 +39,10 @@ public class MyUart {
     public void stop() {
         Log.log("Try to close port .");
         try {
-            serialReader.stopReader();
-            commPort.close();
+            if (serialReader != null && serialReader.isAlive())
+                serialReader.stopReader();
+            if (commPort != null)
+                commPort.close();
         } catch (Exception e) {
             e.printStackTrace();
             Log.log("Error, while closing port! " + e.getLocalizedMessage());

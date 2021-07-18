@@ -39,6 +39,7 @@ public class KeysSerializer
         try {
             final JsonObject data = jsonElement.getAsJsonObject();
 
+            Log.log("Get keys...");
             keyMap.setKeyA(revealKey("keyA", data));
             keyMap.setKeyB(revealKey("keyB", data));
             keyMap.setKeyC(revealKey("keyC", data));
@@ -53,6 +54,8 @@ public class KeysSerializer
 
             keyMap.setKeyStart(revealKey("keyStart", data));
             keyMap.setKeyMode(revealKey("keyMode", data));
+
+            Log.log("Keys deserialized");
         } catch (Exception e) {
             Log.log("Cant deserialize keys : " + e.getLocalizedMessage());
             e.printStackTrace();
@@ -63,6 +66,7 @@ public class KeysSerializer
     private static int revealKey(String key, JsonObject data) throws Exception {
         String temp = String.valueOf(data.get(key));
         temp = temp.substring(1, temp.length() - 1);
+        Log.log(key + "\t" + temp);
         return KeyMap.getKeyCodeByName(temp);
     }
 }

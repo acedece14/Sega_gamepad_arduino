@@ -86,9 +86,9 @@ public class GamePad {
         try {
             if (args.contains("\r\n")) {
                 value = Integer.valueOf(args.split("\r\n")[0]);
-                runCommand(args.split("\r\n")[1]);
+                //runCommand(args.split("\r\n")[1]);
                 System.err.println("splitted data: " + args);
-            } else value = Integer.valueOf(args);
+            } else value = Integer.parseInt(args);
         } catch (NumberFormatException e) {
 
             new Thread(() -> {
@@ -152,10 +152,10 @@ public class GamePad {
 
 
             case START:
-                KeyEmulator.getInstance().pressEnter(state);
+                KeyEmulator.getInstance().pressStart(state);
                 break;
             case MODE:
-                KeyEmulator.getInstance().pressBackSpace(state);
+                KeyEmulator.getInstance().pressMode(state);
                 break;
         }
     }

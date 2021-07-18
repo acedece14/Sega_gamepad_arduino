@@ -6,7 +6,8 @@ import java.util.Date;
 
 public class Log {
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
+    public static final int MAX_SYMBOLS = 2000;
+    private static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss(SSS)");
 
     private static JTextArea txtLog;
 
@@ -21,8 +22,8 @@ public class Log {
         System.out.println(logString);
         if (txtLog == null)
             return;
-        if (txtLog.getText().length() > 2000)
-            txtLog.setText(txtLog.getText().substring(500));
+        if (txtLog.getText().length() > MAX_SYMBOLS)
+            txtLog.setText(txtLog.getText().substring(0, MAX_SYMBOLS / 2));
 
         txtLog.setText(logString + "\r\n" + txtLog.getText());
     }

@@ -18,6 +18,7 @@ public class Settings {
     private String lastOpenedPort;
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private boolean isNeedDarkTheme = false;
+    private int serialTimeout = 200;
 
     private Settings() {}
 
@@ -71,4 +72,6 @@ public class Settings {
     boolean isNeedDarkTheme() {
         return isNeedDarkTheme;
     }
+
+    public int getSerialTimeout() { return serialTimeout; }
 }

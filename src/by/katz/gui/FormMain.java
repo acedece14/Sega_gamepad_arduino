@@ -35,16 +35,15 @@ public class FormMain extends JFrame {
     }
 
     private JButton btnOpenClosePort;
+    private JButton btnSaveKeyMap;
+    private JButton btnLoadKeymap;
+    private JButton btnUpdateKeymap;
+    private JButton btnEdit;
     private JPanel pnlMain;
     private JList<String> lstComPorts;
     private JTextArea txtLog;
     private JTextField edtKeymapName;
-    private JButton btnSaveKeyMap;
-    private JButton btnLoadKeymap;
     private JComboBox<String> cbKeymaps;
-    private JCheckBox cbFastKeys;
-    private JButton btnUpdateKeymap;
-    private JButton btnEdit;
     private MyUart uart;
 
     private STATE state = CLOSED;
@@ -79,7 +78,6 @@ public class FormMain extends JFrame {
         }
 
         addWindowStateListener(e -> {
-            System.out.println("> " + e.getNewState());
             if (e.getNewState() == 1) showHideForm();
         });
 
@@ -152,7 +150,6 @@ public class FormMain extends JFrame {
         btnSaveKeyMap.addActionListener(e -> KeyMap.saveKeyMap(edtKeymapName.getText()));
         btnLoadKeymap.addActionListener(e -> KeyMap.loadKeyMap(edtKeymapName.getText()));
         edtKeymapName.setText(Settings.getInstance().getLastUsedKeymap());
-        cbFastKeys.addActionListener(e -> KeyEmulator.setFastKeys(cbFastKeys.isSelected()));
         btnUpdateKeymap.addActionListener(a -> updateKeymaps());
         btnEdit.addActionListener(a -> new DialogEditKeymap());
     }

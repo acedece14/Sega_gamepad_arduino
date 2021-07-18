@@ -77,7 +77,7 @@ public class KeyMap {
         if (keys.containsKey(keyName))
             return keys.get(keyName);
         else {
-            keys.forEach((k, v) -> System.out.println("key: " + k + " value:" + v));
+            keys.forEach((k, v) -> Log.log("key: " + k + " value:" + v));
             throw new Exception("Unknown key: " + keyName + "!!!");
         }
     }
