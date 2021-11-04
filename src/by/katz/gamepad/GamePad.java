@@ -23,9 +23,10 @@ public class GamePad {
     private static final int MODE = 7;
     private static final int START = 9;
 
+    @SuppressWarnings("UnusedAssignment")
     private ArrayList<Button> keys = new ArrayList<>();
 
-    class Button {
+    static class Button {
         String name;
 
         Button(String name) {
@@ -37,8 +38,8 @@ public class GamePad {
 
     private static final int BUTTONS_COUNT = 17;
 
-    private boolean[] bits;
-    private boolean[] lastBits;
+    private final boolean[] bits;
+    private final boolean[] lastBits;
 
     private GamePad() {
         bits = new boolean[BUTTONS_COUNT];
@@ -78,85 +79,32 @@ public class GamePad {
             keys.add(new Button("SMD_RIGHT"));
             keys.add(new Button("SMD_MAX_KEYS"));
         }
-
     }
 
-    public void runCommand(String args) {
-        int value;
-        try {
-            if (args.contains("\r\n")) {
-                value = Integer.valueOf(args.split("\r\n")[0]);
-                //runCommand(args.split("\r\n")[1]);
-                System.err.println("splitted data: " + args);
-            } else value = Integer.parseInt(args);
-        } catch (NumberFormatException e) {
-
-            new Thread(() -> {
-
-                byte[] bytes = args.getBytes();
-                String res = "";
-                for (byte aByte : bytes)
-                    res += "#" + (int) aByte + " ";
-                Toolkit.getDefaultToolkit().beep();
-                Log.log("error decode: " + res);
-                e.printStackTrace();
-            }).start();
-
-            //System.exit(1);
-            return;
-        }
-
-        for (int i = BUTTONS_COUNT - 1; i >= 0; i--)
+    public void runCommand(int value) {
+        for (var i = BUTTONS_COUNT - 1; i >= 0; i--)
             bits[i] = (value & (1 << i)) != 0;
-        for (int i = 0; i < BUTTONS_COUNT; i++)
+        for (var i = 0; i < BUTTONS_COUNT; i++)
             if (lastBits[i] != bits[i])
                 applyButton(i, bits[i]);
-
         System.arraycopy(bits, 0, lastBits, 0, BUTTONS_COUNT);
     }
 
     private void applyButton(int key, boolean state) {
+        var kEm = KeyEmulator.getInstance();
         switch (key) {
-            case UP:
-                KeyEmulator.getInstance().pressArrowUp(state);
-                break;
-            case DOWN:
-                KeyEmulator.getInstance().pressArrowDown(state);
-                break;
-            case LEFT:
-                KeyEmulator.getInstance().pressArrowLeft(state);
-                break;
-            case RIGHT:
-                KeyEmulator.getInstance().pressArrowRight(state);
-                break;
-
-
-            case A:
-                KeyEmulator.getInstance().pressA(state);
-                break;
-            case B:
-                KeyEmulator.getInstance().pressB(state);
-                break;
-            case C:
-                KeyEmulator.getInstance().pressC(state);
-                break;
-            case X:
-                KeyEmulator.getInstance().pressX(state);
-                break;
-            case Y:
-                KeyEmulator.getInstance().pressY(state);
-                break;
-            case Z:
-                KeyEmulator.getInstance().pressZ(state);
-                break;
-
-
-            case START:
-                KeyEmulator.getInstance().pressStart(state);
-                break;
-            case MODE:
-                KeyEmulator.getInstance().pressMode(state);
-                break;
+            case UP -> kEm.pressArrowUp(state);
+            case DOWN -> kEm.pressArrowDown(state);
+            case LEFT -> kEm.pressArrowLeft(state);
+            case RIGHT -> kEm.pressArrowRight(state);
+            case A -> kEm.pressA(state);
+            case B -> kEm.pressB(state);
+            case C -> kEm.pressC(state);
+            case X -> kEm.pressX(state);
+            case Y -> kEm.pressY(state);
+            case Z -> kEm.pressZ(state);
+            case START -> kEm.pressStart(state);
+            case MODE -> kEm.pressMode(state);
         }
     }
 

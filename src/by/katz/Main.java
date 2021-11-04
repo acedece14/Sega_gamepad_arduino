@@ -13,9 +13,7 @@ public class Main {
         //noinspection ResultOfMethodCallIgnored
         KeyMap.get().getKeyA();
         Settings.getInstance().loadSettings();
-        if (Settings.getInstance().isNeedDarkTheme())
-            FlatDarculaLaf.setup();
-        else ThemeSetter.apply(3);
+        FlatDarculaLaf.setup();
         new FormMain();
     }
 }

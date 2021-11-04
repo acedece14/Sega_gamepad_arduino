@@ -11,7 +11,7 @@ public class GUIProperties {
     public static final boolean IS_CUSTOM_ENABLED = false;
     // see definition in class com.jtattoo.plaf.texture.TextureUtils
     //public static final Integer TEXTURE_TYPE = new Integer(0); // WindowTexture
-    public static final Integer TEXTURE_TYPE = new Integer(1); // BackgroundTexture
+    public static final Integer TEXTURE_TYPE = 1; // BackgroundTexture
 
     public static final String PLAF_METAL = "javax.swing.plaf.metal.MetalLookAndFeel";
     public static final String PLAF_NIMBUS = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel";

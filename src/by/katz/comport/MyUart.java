@@ -50,16 +50,5 @@ public class MyUart {
         }
         Log.log("Port closed");
     }
-
-    private static StringBuilder resultBytes = new StringBuilder();
-
-    static String getStringFromBytes(byte[] buffer, int len) {
-        //StringBuilder resultBytes = new StringBuilder();
-        resultBytes.setLength(0);
-        for (int i = 0; i < len; i++)
-            resultBytes.append((char) buffer[i]);
-        return resultBytes.toString();
-
-    }
 }
 
