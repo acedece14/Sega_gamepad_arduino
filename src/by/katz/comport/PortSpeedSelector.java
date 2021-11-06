@@ -1,3 +1,10 @@
+/*
+ * Created by Konstantin Chuyasov
+ * Last modified: 06.11.2021, 19:44
+ * Contacts: acedece14@gmail.com
+ *
+ */
+
 package by.katz.comport;
 
 import by.katz.Log;
@@ -5,10 +12,6 @@ import by.katz.Log;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/**
- * Created by katz on 17.06.2017.
- */
- 
 class PortSpeedSelector {
 
     private static ArrayList<Integer> speeds;

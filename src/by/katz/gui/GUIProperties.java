@@ -1,11 +1,14 @@
+/*
+ * Created by Konstantin Chuyasov
+ * Last modified: 06.11.2021, 19:44
+ * Contacts: acedece14@gmail.com
+ *
+ */
+
 package by.katz.gui;
 
 import javax.swing.*;
 
-/**
- * //
- * Created by katz on 26.05.2017.
- */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class GUIProperties {
     public static final boolean IS_CUSTOM_ENABLED = false;

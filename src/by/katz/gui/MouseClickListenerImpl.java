@@ -1,3 +1,10 @@
+/*
+ * Created by Konstantin Chuyasov
+ * Last modified: 06.11.2021, 19:44
+ * Contacts: acedece14@gmail.com
+ *
+ */
+
 package by.katz.gui;
 
 import java.awt.event.MouseEvent;

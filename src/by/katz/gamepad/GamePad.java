@@ -1,19 +1,18 @@
+/*
+ * Created by Konstantin Chuyasov
+ * Last modified: 06.11.2021, 19:44
+ * Contacts: acedece14@gmail.com
+ *
+ */
+
 package by.katz.gamepad;
 
 import by.katz.Log;
 
-import java.awt.*;
 import java.util.ArrayList;
 
-/**
- * //
- * Created by katz on 17.06.2017.
- */
-public class GamePad {
-    private static final int UP = 12;
-    private static final int DOWN = 13;
-    private static final int LEFT = 14;
-    private static final int RIGHT = 15;
+public enum GamePad {
+    INSTANCE;
     private static final int A = 0;
     private static final int B = 1;
     private static final int C = 2;
@@ -22,64 +21,15 @@ public class GamePad {
     private static final int Z = 6;
     private static final int MODE = 7;
     private static final int START = 9;
-
-    @SuppressWarnings("UnusedAssignment")
-    private ArrayList<Button> keys = new ArrayList<>();
-
-    static class Button {
-        String name;
-
-        Button(String name) {
-            this.name = name;
-        }
-    }
-
-    private static GamePad instance;
+    private static final int UP = 12;
+    private static final int DOWN = 13;
+    private static final int LEFT = 14;
+    private static final int RIGHT = 15;
 
     private static final int BUTTONS_COUNT = 17;
 
-    private final boolean[] bits;
-    private final boolean[] lastBits;
-
-    private GamePad() {
-        bits = new boolean[BUTTONS_COUNT];
-        lastBits = new boolean[BUTTONS_COUNT];
-        keys = new Keys();
-        for (Button key : keys)
-            Log.log(key.toString());
-    }
-
-    public static GamePad getInstance() {
-        if (instance == null) {
-            instance = new GamePad();
-        }
-        return instance;
-    }
-
-
-    private class Keys extends ArrayList<Button> {
-
-
-        private Keys() {
-            keys.add(new Button("SMD_A"));
-            keys.add(new Button("SMD_B"));
-            keys.add(new Button("SMD_C"));
-            keys.add(new Button("SMD_EMPTY_1"));
-            keys.add(new Button("SMD_X"));
-            keys.add(new Button("SMD_Y"));
-            keys.add(new Button("SMD_Z"));
-            keys.add(new Button("SMD_MODE"));
-            keys.add(new Button("SMD_EMPTY_2"));
-            keys.add(new Button("SMD_START"));
-            keys.add(new Button("SMD_EMPTY_3"));
-            keys.add(new Button("SMD_EMPTY_4"));
-            keys.add(new Button("SMD_UP"));
-            keys.add(new Button("SMD_DOWN"));
-            keys.add(new Button("SMD_LEFT"));
-            keys.add(new Button("SMD_RIGHT"));
-            keys.add(new Button("SMD_MAX_KEYS"));
-        }
-    }
+    private final boolean[] bits = new boolean[BUTTONS_COUNT];
+    private final boolean[] lastBits = new boolean[BUTTONS_COUNT];
 
     public void runCommand(int value) {
         for (var i = BUTTONS_COUNT - 1; i >= 0; i--)

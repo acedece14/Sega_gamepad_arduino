@@ -1,3 +1,10 @@
+/*
+ * Created by Konstantin Chuyasov
+ * Last modified: 06.11.2021, 19:44
+ * Contacts: acedece14@gmail.com
+ *
+ */
+
 package by.katz.gui;
 
 import by.katz.Log;
@@ -5,7 +12,6 @@ import by.katz.Main;
 import by.katz.Settings;
 import by.katz.comport.MyUart;
 import by.katz.comport.PortEnumerator;
-import by.katz.gamepad.KeyEmulator;
 import by.katz.keys.KeyMap;
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
@@ -24,10 +30,11 @@ import java.util.Objects;
 import static by.katz.comport.PortEnumerator.getPortTypeName;
 import static by.katz.gui.FormMain.STATE.CLOSED;
 import static by.katz.gui.FormMain.STATE.OPENED;
+import static by.katz.gui.GuiUtils.showNotify;
 
 public class FormMain extends JFrame {
 
-    private static final int PORT_SPEED = 115200;
+    private static final int PORT_SPEED = Settings.getInstance().getSerialSpeed();
 
     enum STATE {
         CLOSED,
@@ -44,6 +51,7 @@ public class FormMain extends JFrame {
     private JTextArea txtLog;
     private JTextField edtKeymapName;
     private JComboBox<String> cbKeymaps;
+    private JButton btnShowIrForm;
     private MyUart uart;
 
     private STATE state = CLOSED;
@@ -70,7 +78,7 @@ public class FormMain extends JFrame {
         pack();
         setSize(800, 400);
         setLocationRelativeTo(null);
-
+        btnShowIrForm.addActionListener(a -> new DialogIrKeys());
         try {
             createTrayIcon();
         } catch (IOException | AWTException e) {
@@ -96,6 +104,7 @@ public class FormMain extends JFrame {
                 }
             }
         }
+        showNotify("Started");
     }
 
     private void createTrayIcon() throws IOException, AWTException {
@@ -134,7 +143,7 @@ public class FormMain extends JFrame {
         updateKeymaps();
         cbKeymaps.addActionListener(a -> edtKeymapName.setText(String.valueOf(cbKeymaps.getSelectedItem())));
 
-        final DefaultListModel<String> listModel = new DefaultListModel<>();
+        final var listModel = new DefaultListModel<String>();
 
         for (CommPortIdentifier p : ports)
             listModel.addElement(p.getName() + " " + getPortTypeName(p.getPortType()));
@@ -165,16 +174,20 @@ public class FormMain extends JFrame {
     private void openClosePort() {
 
         if (state == CLOSED) {
-            CommPortIdentifier port = ports.get(lstComPorts.getSelectedIndex());
+            var port = ports.get(lstComPorts.getSelectedIndex());
             uart = new MyUart(port, PORT_SPEED);
             try {
                 uart.start();
                 btnOpenClosePort.setText("Close port");
                 state = OPENED;
                 Settings.getInstance().setLastOpenedPort(port.getName());
-            } catch (UnsupportedCommOperationException | IOException | PortInUseException e2) {
-                JOptionPane.showMessageDialog(null, e2.getLocalizedMessage());
-                Log.log("Error while open port: " + e2.getLocalizedMessage());
+            } catch (PortInUseException e) {
+                GuiUtils.showWarning("Port in use!");
+                Log.log("Port in use!");
+                state = CLOSED;
+            } catch (UnsupportedCommOperationException | IOException e) {
+                GuiUtils.showWarning("Cant open port: " + e.getLocalizedMessage());
+                Log.log("Error while open port: " + e.getLocalizedMessage());
                 state = CLOSED;
             }
         } else if (state == OPENED) {

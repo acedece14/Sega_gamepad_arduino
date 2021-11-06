@@ -1,12 +1,15 @@
+/*
+ * Created by Konstantin Chuyasov
+ * Last modified: 06.11.2021, 19:44
+ * Contacts: acedece14@gmail.com
+ *
+ */
+
 package by.katz.gui;
 
 import javax.swing.*;
 import java.util.Random;
 
-/**
- * //
- * Created by katz on 26.05.2017.
- */
 public class ThemeSetter {
 
     public static void apply(int r) {

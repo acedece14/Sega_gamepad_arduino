@@ -1,3 +1,10 @@
+/*
+ * Created by Konstantin Chuyasov
+ * Last modified: 06.11.2021, 19:44
+ * Contacts: acedece14@gmail.com
+ *
+ */
+
 package by.katz.comport;
 
 import by.katz.Log;
@@ -5,12 +12,9 @@ import by.katz.Settings;
 import gnu.io.*;
 
 import java.io.IOException;
-import java.io.InputStream;
 
-/**
- * Created by me on 29.11.2016.
- * acedece14@gmail.com
- */
+import static gnu.io.SerialPort.*;
+
 public class MyUart {
 
     private final CommPortIdentifier port;
@@ -26,29 +30,26 @@ public class MyUart {
 
     public void start() throws UnsupportedCommOperationException, IOException, PortInUseException {
         commPort = port.open(this.getClass().getName(), Settings.getInstance().getSerialTimeout());
-        SerialPort serialPort = (SerialPort) commPort;
-        serialPort.setSerialPortParams(speed, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-
-        InputStream in = serialPort.getInputStream();
-        serialReader = new SerialReader(in);
+        var serialPort = (SerialPort) commPort;
+        serialPort.setSerialPortParams(speed, DATABITS_8, STOPBITS_1, PARITY_NONE);
+        serialReader = new SerialReader(serialPort.getInputStream());
         serialReader.start();
-        Log.log("Port opened");
+        Log.log(port.getName() + " opened");
     }
 
 
     public void stop() {
-        Log.log("Try to close port .");
+        Log.log("Try to close " + port.getName());
         try {
             if (serialReader != null && serialReader.isAlive())
                 serialReader.stopReader();
             if (commPort != null)
                 commPort.close();
+            Log.log(port.getName() + " closed");
         } catch (Exception e) {
             e.printStackTrace();
-            Log.log("Error, while closing port! " + e.getLocalizedMessage());
-            return;
+            Log.log("Error, while closing " + port.getName() + ": " + e.getLocalizedMessage());
         }
-        Log.log("Port closed");
     }
 }
 

@@ -1,3 +1,10 @@
+/*
+ * Created by Konstantin Chuyasov
+ * Last modified: 06.11.2021, 19:44
+ * Contacts: acedece14@gmail.com
+ *
+ */
+
 package by.katz;
 
 import com.google.gson.Gson;
@@ -10,15 +17,15 @@ import java.io.IOException;
 
 public class Settings {
 
-    private static File SETTINGS_FILE = new File("gp_settings.json");
+    private static final File SETTINGS_FILE = new File("gp_settings.json");
     private static Settings instance;
 
 
     private String lastUsedKeymap = "";
     private String lastOpenedPort;
-    @SuppressWarnings({"unused", "FieldCanBeLocal"})
-    private boolean isNeedDarkTheme = false;
-    private int serialTimeout = 200;
+    private final int serialTimeout = 200;
+    private final String baseServerUrl = "http://127.0.0.1/control?";
+    private final int serialSpeed = 115200;
 
     private Settings() {}
 
@@ -69,9 +76,11 @@ public class Settings {
         return lastOpenedPort;
     }
 
-    boolean isNeedDarkTheme() {
-        return isNeedDarkTheme;
-    }
-
     public int getSerialTimeout() { return serialTimeout; }
+
+    public String getBaseServerUrl() { return baseServerUrl; }
+
+    public int getSerialSpeed() {
+        return serialSpeed;
+    }
 }

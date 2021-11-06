@@ -1,3 +1,10 @@
+/*
+ * Created by Konstantin Chuyasov
+ * Last modified: 06.11.2021, 19:44
+ * Contacts: acedece14@gmail.com
+ *
+ */
+
 package by.katz;
 
 import javax.swing.*;
@@ -6,8 +13,8 @@ import java.util.Date;
 
 public class Log {
 
-    public static final int MAX_SYMBOLS = 2000;
-    private static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss(SSS)");
+    public static final int MAX_SYMBOLS = 5000;
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss(SSS)");
 
     private static JTextArea txtLog;
 
