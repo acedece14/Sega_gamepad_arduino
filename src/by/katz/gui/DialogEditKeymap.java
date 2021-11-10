@@ -1,6 +1,6 @@
 /*
  * Created by Konstantin Chuyasov
- * Last modified: 06.11.2021, 19:44
+ * Last modified: 08.11.2021, 23:38
  * Contacts: acedece14@gmail.com
  *
  */
@@ -8,7 +8,7 @@
 package by.katz.gui;
 
 import by.katz.Log;
-import by.katz.keys.KeyMap;
+import by.katz.keyboard.KeyMap;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;

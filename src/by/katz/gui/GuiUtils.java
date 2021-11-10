@@ -1,6 +1,6 @@
 /*
  * Created by Konstantin Chuyasov
- * Last modified: 06.11.2021, 19:44
+ * Last modified: 09.11.2021, 12:11
  * Contacts: acedece14@gmail.com
  *
  */
@@ -17,7 +17,7 @@ public class GuiUtils {
 
     private static JDialog lastNotify = null;
 
-    public static void showNotify(String text) {
+    public static void showNotify(String text, int size) {
         if (lastNotify != null) {
             lastNotify.dispose();
             lastNotify = null;
@@ -27,7 +27,7 @@ public class GuiUtils {
         dialog.setUndecorated(true);
         dialog.setLocationByPlatform(true);
         var label = new JLabel(text);
-        label.setFont(new Font("Calibri", Font.PLAIN, 72));
+        label.setFont(new Font("Calibri", Font.PLAIN, size));
         dialog.setOpacity(0.5f);
         dialog.add(label);
         dialog.pack();
@@ -41,5 +41,9 @@ public class GuiUtils {
             dialog.dispose();
         }).start();
         lastNotify = dialog;
+    }
+
+    public static void showNotify(String text) {
+        showNotify(text, 72);
     }
 }

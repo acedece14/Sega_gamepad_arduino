@@ -1,6 +1,6 @@
 /*
  * Created by Konstantin Chuyasov
- * Last modified: 06.11.2021, 19:44
+ * Last modified: 10.11.2021, 18:24
  * Contacts: acedece14@gmail.com
  *
  */
@@ -12,7 +12,7 @@ import by.katz.Main;
 import by.katz.Settings;
 import by.katz.comport.MyUart;
 import by.katz.comport.PortEnumerator;
-import by.katz.keys.KeyMap;
+import by.katz.keyboard.KeyMap;
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import gnu.io.UnsupportedCommOperationException;
@@ -23,7 +23,6 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -33,12 +32,19 @@ import static by.katz.gui.FormMain.STATE.OPENED;
 import static by.katz.gui.GuiUtils.showNotify;
 
 public class FormMain extends JFrame {
-
+    public static final int SINGLE_CLICK = 1;
+    public static final int DOUBLE_CLICK = 2;
+    private TrayIcon trayIcon;
     private static final int PORT_SPEED = Settings.getInstance().getSerialSpeed();
 
     enum STATE {
         CLOSED,
         OPENED
+    }
+
+    enum COMPORT_STATE {
+        OPENED,
+        CLOSED
     }
 
     private JButton btnOpenClosePort;
@@ -58,6 +64,7 @@ public class FormMain extends JFrame {
 
     private final ArrayList<CommPortIdentifier> ports;
 
+    private volatile boolean isWaitTrayDoubleCLick = false;
 
     public FormMain() {
 
@@ -66,8 +73,6 @@ public class FormMain extends JFrame {
             uart.stop();
         }));
 
-        URL url = Main.class.getResource("/tray.png");
-        setIconImage(Toolkit.getDefaultToolkit().getImage(url));
 
         Log.bindTxtView(txtLog);
         ports = PortEnumerator.getPorts();
@@ -81,6 +86,7 @@ public class FormMain extends JFrame {
         btnShowIrForm.addActionListener(a -> new DialogIrKeys());
         try {
             createTrayIcon();
+            setTrayImage(COMPORT_STATE.CLOSED);
         } catch (IOException | AWTException e) {
             e.printStackTrace();
         }
@@ -92,14 +98,15 @@ public class FormMain extends JFrame {
         initVisible();
         setVisible(true);
 
-        String port = Settings.getInstance().getLastOpenedPort();
+        var port = Settings.getInstance().getLastOpenedPort();
         if (port != null) {
             Log.log("Try to open " + port + " from settings");
             for (int i = 0; i < lstComPorts.getModel().getSize() - 1; i++) {
-                String el = lstComPorts.getModel().getElementAt(i);
+                var el = lstComPorts.getModel().getElementAt(i);
                 if (port.equals(el.split(" ")[0])) {
                     lstComPorts.setSelectedIndex(i);
-                    btnOpenClosePort.doClick();
+                    changePortState();
+                    showHideForm();
                     break;
                 }
             }
@@ -107,29 +114,60 @@ public class FormMain extends JFrame {
         showNotify("Started");
     }
 
+    private void setTrayImage(COMPORT_STATE state) {
+        if (trayIcon == null)
+            return;
+        var url = switch (state) {
+            case OPENED -> Main.class.getResource("/tray.png");
+            case CLOSED -> Main.class.getResource("/tray_inactive.png");
+        };
+        if (url == null)
+            return;
+        try {
+            trayIcon.setImage(ImageIO.read(url));
+            GuiUtils.showNotify("Comport state: " + state);
+        } catch (IOException e) { Log.log("Failed to load trayicon"); }
+    }
+
     private void createTrayIcon() throws IOException, AWTException {
 
         if (SystemTray.isSupported()) {
             final SystemTray tray = SystemTray.getSystemTray();
 
-            final Image image = ImageIO.read(Objects.requireNonNull(FormMain.class.getClassLoader()
+            final var image = ImageIO.read(Objects.requireNonNull(FormMain.class.getClassLoader()
                     .getResourceAsStream("tray.png")));
-            final PopupMenu popup = new PopupMenu();
-            final MenuItem miShowHide = new MenuItem("Open/hide");
+            final var popup = new PopupMenu();
+            final var miShowHide = new MenuItem("Open/hide");
             miShowHide.addActionListener(a -> showHideForm());
-            final MenuItem miExit = new MenuItem("Exit");
+            final var miExit = new MenuItem("Exit");
             miExit.addActionListener(a -> FormMain.this.dispatchEvent(new WindowEvent(FormMain.this, WindowEvent.WINDOW_CLOSING)));
 
             popup.add(miShowHide);
             popup.add(miExit);
 
-            final TrayIcon trayIcon = new TrayIcon(image, "Gamepad", popup);
+            trayIcon = new TrayIcon(image, getTitle(), popup);
             trayIcon.addMouseListener(new MouseClickListenerImpl() {
                 @Override public void mouseClicked(MouseEvent e) {
                     if (e.getButton() != MouseEvent.BUTTON1)
                         return;
-                    setVisible(!isVisible());
-                    setState(Frame.NORMAL);
+                    if (e.getClickCount() == DOUBLE_CLICK) {
+                        isWaitTrayDoubleCLick = false;
+                        setVisible(!isVisible());
+                        setState(Frame.NORMAL);
+                        return;
+                    }
+                    if (isWaitTrayDoubleCLick || e.getClickCount() != SINGLE_CLICK)
+                        return;
+                    isWaitTrayDoubleCLick = true;
+                    new Thread(() -> {
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException ignored) { }
+                        if (isWaitTrayDoubleCLick) {
+                            changePortState();
+                            isWaitTrayDoubleCLick = false;
+                        }
+                    }).start();
                 }
             });
             tray.add(trayIcon);
@@ -152,10 +190,10 @@ public class FormMain extends JFrame {
         lstComPorts.addMouseListener(new MouseClickListenerImpl() {
             @Override public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2 && state == CLOSED)
-                    openClosePort();
+                    changePortState();
             }
         });
-        btnOpenClosePort.addActionListener(e -> openClosePort());
+        btnOpenClosePort.addActionListener(e -> changePortState());
         btnSaveKeyMap.addActionListener(e -> KeyMap.saveKeyMap(edtKeymapName.getText()));
         btnLoadKeymap.addActionListener(e -> KeyMap.loadKeyMap(edtKeymapName.getText()));
         edtKeymapName.setText(Settings.getInstance().getLastUsedKeymap());
@@ -171,7 +209,7 @@ public class FormMain extends JFrame {
     }
 
 
-    private void openClosePort() {
+    private void changePortState() {
 
         if (state == CLOSED) {
             var port = ports.get(lstComPorts.getSelectedIndex());
@@ -181,6 +219,7 @@ public class FormMain extends JFrame {
                 btnOpenClosePort.setText("Close port");
                 state = OPENED;
                 Settings.getInstance().setLastOpenedPort(port.getName());
+                setTrayImage(COMPORT_STATE.OPENED);
             } catch (PortInUseException e) {
                 GuiUtils.showWarning("Port in use!");
                 Log.log("Port in use!");
@@ -194,6 +233,7 @@ public class FormMain extends JFrame {
             uart.stop();
             btnOpenClosePort.setText("Open port");
             state = CLOSED;
+            setTrayImage(COMPORT_STATE.CLOSED);
         }
     }
 

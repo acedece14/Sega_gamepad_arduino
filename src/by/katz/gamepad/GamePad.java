@@ -1,15 +1,11 @@
 /*
  * Created by Konstantin Chuyasov
- * Last modified: 06.11.2021, 19:44
+ * Last modified: 07.11.2021, 13:30
  * Contacts: acedece14@gmail.com
  *
  */
 
 package by.katz.gamepad;
-
-import by.katz.Log;
-
-import java.util.ArrayList;
 
 public enum GamePad {
     INSTANCE;

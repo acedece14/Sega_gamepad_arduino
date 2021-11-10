@@ -1,13 +1,14 @@
 /*
  * Created by Konstantin Chuyasov
- * Last modified: 06.11.2021, 19:44
+ * Last modified: 08.11.2021, 23:43
  * Contacts: acedece14@gmail.com
  *
  */
 
 package by.katz.gui;
 
-import by.katz.IrController;
+import by.katz.infrared.IrController;
+import by.katz.infrared.IrKey;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -15,7 +16,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-import static by.katz.IrController.REPEAT_LAST;
+import static by.katz.infrared.IrController.REPEAT_LAST;
 
 public class DialogIrKeys extends JDialog implements IrController.IIrListener {
     private boolean scanKey = false;
@@ -85,8 +86,8 @@ public class DialogIrKeys extends JDialog implements IrController.IIrListener {
     private void updateKeysList() {
         var keys = IrController.get().getKeys();
         var model = new DefaultListModel<String>();
-        for (IrController.IrKey k : keys)
-            model.add(model.getSize(), k.getKey() + " " + k.getName());
+        for (var k : keys)
+            model.add(model.getSize(), k.getKeyCode() + " " + k.getName());
         lstKeys.setModel(model);
         lblStatus.setText("Keys update");
     }
